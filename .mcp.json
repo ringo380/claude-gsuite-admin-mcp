@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "claude-gsuite-admin": {
+      "command": "python",
+      "args": ["-m", "claude_gsuite_admin.server"],
+      "env": {
+        "PYTHONPATH": "${PWD}/src"
+      }
+    }
+  }
+}

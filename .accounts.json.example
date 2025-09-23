@@ -1,0 +1,14 @@
+{
+    "accounts": [
+        {
+            "email": "admin@yourdomain.com",
+            "account_type": "admin",
+            "extra_info": "Primary Google Workspace super admin account"
+        },
+        {
+            "email": "it-admin@yourdomain.com",
+            "account_type": "delegated_admin",
+            "extra_info": "Delegated admin for user and group management"
+        }
+    ]
+}
