@@ -179,3 +179,4 @@ Thumbs.db
 # Claude CLI specific
 .claude/
 shell-snapshots/
+CLAUDE.md
