@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  claude-gsuite-admin-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-}
+        VCS_REF: ${VCS_REF:-}
+        VERSION: ${VERSION:-latest}
+    image: claude-gsuite-admin-mcp:latest
+    container_name: claude-gsuite-admin-mcp
+    restart: unless-stopped
+    ports:
+      - "${MCP_PORT:-8000}:8000"
+    volumes:
+      # Configuration files
+      - "./config/.gauth.json:/app/config/.gauth.json:ro"
+      - "./config/.accounts.json:/app/config/.accounts.json:ro"
+      # OAuth credentials storage
+      - "oauth_data:/app/oauth"
+      # Logs
+      - "logs:/app/logs"
+    environment:
+      - GSUITE_OAUTH_DIR=/app/oauth
+      - GSUITE_GAUTH_FILE=/app/config/.gauth.json
+      - GSUITE_ACCOUNTS_FILE=/app/config/.accounts.json
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - MCP_HOST=${MCP_HOST:-0.0.0.0}
+      - MCP_PORT=${MCP_PORT:-8000}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - mcp-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Redis for caching (can be enabled if needed)
+  redis:
+    image: redis:7-alpine
+    container_name: claude-gsuite-admin-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - "redis_data:/data"
+    networks:
+      - mcp-network
+    profiles:
+      - cache
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  # Optional: Monitoring with Prometheus metrics
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: claude-gsuite-admin-prometheus
+    restart: unless-stopped
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - "./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+      - "prometheus_data:/prometheus"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - mcp-network
+    profiles:
+      - monitoring
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+volumes:
+  oauth_data:
+    driver: local
+  logs:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+
+networks:
+  mcp-network:
+    driver: bridge

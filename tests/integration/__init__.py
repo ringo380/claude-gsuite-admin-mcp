@@ -1,0 +1,1 @@
+"""Integration tests for Claude GSuite Admin MCP."""

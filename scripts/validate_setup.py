@@ -9,6 +9,7 @@ import sys
 import os
 import json
 import subprocess
+import argparse
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -284,4 +285,11 @@ def main():
     return 0 if all_checks_passed else 1
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Validate Claude GSuite Admin MCP setup")
+    parser.add_argument("--dry-run", action="store_true", help="Skip tests requiring authentication")
+    args = parser.parse_args()
+
+    if args.dry_run:
+        print("Running in dry-run mode (skipping authentication tests)")
+
     sys.exit(main())

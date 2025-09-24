@@ -25,6 +25,7 @@ from .tools.org_units import ORG_UNIT_HANDLERS
 from .tools.devices import DEVICE_HANDLERS
 from .tools.reports import REPORT_HANDLERS
 from .tools.security import SECURITY_HANDLERS
+from .tools.domains import DOMAIN_HANDLERS
 
 # Setup logging
 logging.basicConfig(
@@ -79,6 +80,9 @@ def _initialize_handlers():
 
     # Register security handlers
     for handler in SECURITY_HANDLERS:
+        add_tool_handler(handler)
+
+    for handler in DOMAIN_HANDLERS:
         add_tool_handler(handler)
 
     logger.info(f"Initialized {len(tool_handlers)} tool handlers")
