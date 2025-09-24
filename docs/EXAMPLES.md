@@ -120,7 +120,7 @@ This document provides practical examples of using the Claude Google Workspace A
 "Show me all mobile devices registered to user john.doe@company.com"
 
 # Device actions
-"Remotely wipe the mobile device with ID 'ABC123' due to security concerns"
+"Perform an admin remote wipe on the mobile device with ID 'ABC123' due to security concerns"
 
 # Device reports
 "Generate a report of all Android devices that haven't synced in the last 30 days"
@@ -251,7 +251,7 @@ This document provides practical examples of using the Claude Google Workspace A
 2. Reset all sign-in cookies
 3. Show me all recent login activities
 4. List all devices registered to this user
-5. Remote wipe all mobile devices
+5. Perform admin remote wipe on all mobile devices
 6. Generate an audit report of all actions by this user in the last 48 hours"
 ```
 

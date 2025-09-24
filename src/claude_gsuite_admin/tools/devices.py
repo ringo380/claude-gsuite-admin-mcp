@@ -225,7 +225,7 @@ class ManageMobileDeviceHandler(AdminToolHandler):
                     "action": {
                         "type": "string",
                         "description": "Action to perform on the device",
-                        "enum": ["approve", "block", "cancel_remote_wipe_then_activate", "cancel_remote_wipe_then_block", "remote_wipe", "delete"]
+                        "enum": ["approve", "block", "cancel_remote_wipe_then_activate", "cancel_remote_wipe_then_block", "admin_remote_wipe", "admin_account_wipe", "delete"]
                     },
                     "confirm": {
                         "type": "boolean",
@@ -246,7 +246,7 @@ class ManageMobileDeviceHandler(AdminToolHandler):
             confirm = arguments.get("confirm", False)
 
             # Check for destructive actions
-            destructive_actions = ["remote_wipe", "delete"]
+            destructive_actions = ["admin_remote_wipe", "admin_account_wipe", "delete"]
             if action in destructive_actions and not confirm:
                 return [TextContent(
                     type="text",
@@ -279,7 +279,8 @@ class ManageMobileDeviceHandler(AdminToolHandler):
                     "block": "blocked",
                     "cancel_remote_wipe_then_activate": "cancelled remote wipe and activated",
                     "cancel_remote_wipe_then_block": "cancelled remote wipe and blocked",
-                    "remote_wipe": "initiated remote wipe on"
+                    "admin_remote_wipe": "initiated admin remote wipe on",
+                    "admin_account_wipe": "initiated admin account wipe on"
                 }
 
                 response = f"✅ Successfully {action_messages.get(action, action)} device: {device_id}"

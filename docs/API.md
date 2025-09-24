@@ -228,7 +228,7 @@ Perform management actions on mobile devices.
 **Parameters:**
 - `user_id` (required): Admin user email
 - `device_id` (required): Device resource ID
-- `action` (required): Action to perform (approve, block, cancel_remote_wipe_then_activate, cancel_remote_wipe_then_block, remote_wipe, delete)
+- `action` (required): Action to perform (approve, block, cancel_remote_wipe_then_activate, cancel_remote_wipe_then_block, admin_remote_wipe, admin_account_wipe, delete)
 - `confirm` (optional): Confirmation for destructive actions (default: false)
 - `customer_id` (optional): Customer ID (default: "my_customer")
 

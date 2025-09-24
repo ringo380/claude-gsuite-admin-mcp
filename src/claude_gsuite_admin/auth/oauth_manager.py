@@ -38,6 +38,7 @@ ADMIN_SCOPES = [
 
     # Device Management
     "https://www.googleapis.com/auth/admin.directory.device.mobile",
+    "https://www.googleapis.com/auth/admin.directory.device.mobile.action",
     "https://www.googleapis.com/auth/admin.directory.device.chromeos",
 
     # Domain Management
