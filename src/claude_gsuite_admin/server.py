@@ -28,6 +28,7 @@ from .tools.security import SECURITY_HANDLERS
 from .tools.domains import DOMAIN_HANDLERS
 from .tools.gmail import GMAIL_HANDLERS
 from .tools.calendar import CALENDAR_HANDLERS
+from .tools.apps import APP_HANDLERS
 
 # Setup logging
 logging.basicConfig(
@@ -94,6 +95,10 @@ def _initialize_handlers():
 
     # Register Calendar handlers
     for handler in CALENDAR_HANDLERS:
+        add_tool_handler(handler)
+
+    # Register Apps handlers
+    for handler in APP_HANDLERS:
         add_tool_handler(handler)
 
     logger.info(f"Initialized {len(tool_handlers)} tool handlers")
