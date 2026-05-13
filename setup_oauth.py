@@ -1,8 +1,25 @@
 #!/usr/bin/env python3
 """Script to set up initial OAuth2 authentication."""
 
+import json
+import os
 import sys
 from claude_gsuite_admin.auth.oauth_manager import OAuthManager
+
+
+def load_primary_account():
+    """Read the first account from .accounts.json so this script works for any tenant."""
+    accounts_file = os.environ.get(
+        "GSUITE_ACCOUNTS_FILE",
+        os.path.join(os.path.dirname(__file__), ".accounts.json"),
+    )
+    with open(accounts_file) as fh:
+        data = json.load(fh)
+    accounts = data.get("accounts", [])
+    if not accounts:
+        raise RuntimeError(f"No accounts configured in {accounts_file}")
+    email = accounts[0]["email"]
+    return email, email.split("@", 1)[1]
 
 def setup_oauth():
     """Interactive OAuth setup."""
@@ -44,7 +61,7 @@ def setup_oauth():
         # Exchange code for credentials
         print("Exchanging authorization code for credentials...")
 
-        user_email = "ryan@robworks.info"  # From our accounts config
+        user_email, user_domain = load_primary_account()
         credentials = oauth_manager.get_credentials(user_email, auth_code)
 
         if credentials:
@@ -55,7 +72,7 @@ def setup_oauth():
             print("\nTesting credentials with API call...")
             service = oauth_manager.get_service(user_email, "admin", "directory_v1")
 
-            users_result = service.users().list(domain='robworks.info', maxResults=1).execute()
+            users_result = service.users().list(domain=user_domain, maxResults=1).execute()
             users = users_result.get('users', [])
 
             if users:
